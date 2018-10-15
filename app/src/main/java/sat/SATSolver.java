@@ -51,9 +51,9 @@ public class SATSolver {
 
         //Find the smallest clause
         Clause smallest = clauses.first();
-        for (Iterator<Clause> clauseIterator = clauses.iterator(); clauseIterator.hasNext(); ) {
-            if (clauseIterator.next().size() < smallest.size()) {
-                smallest = clauseIterator.next();
+        for (Clause c: clauses) {
+            if (c.size() < smallest.size()) {
+                smallest = c;
             }
         }
 
@@ -112,8 +112,7 @@ public class SATSolver {
         2a. Check if the clause is empty. If it is, solution is not satisfiable, return null
          */
         ImList<Clause> newList = new EmptyImList<>();
-        for (Iterator<Clause> clauseIterator = clauses.iterator(); clauseIterator.hasNext();) {
-            Clause addClause = clauseIterator.next();
+        for (Clause addClause: clauses) {
             if(addClause.contains(l) || addClause.contains(l.getNegation())) {
                 addClause = addClause.reduce(l);
                 if (addClause != null) {

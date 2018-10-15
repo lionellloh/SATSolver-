@@ -30,7 +30,7 @@ public class SATSolverTest {
 
 
     public static void main(String[] args) throws FileNotFoundException{
-        File file = new File("/C:/Users/Eda Tan/Desktop/Term4/50.001/Project-2D/project-2d-starting/sampleCNF/s8sat.cnf");
+        File file = new File("/C:/Users/Eda Tan/Desktop/Term4/50.001/Project-2D/project-2d-starting/sampleCNF/s8Sat.cnf");
 
         Formula newFormula = new Formula();
         BufferedReader br = new BufferedReader(new FileReader(file));
@@ -39,7 +39,6 @@ public class SATSolverTest {
 
         int i = 0;
         try {
-
             while ((st = br.readLine()) != null){
                 String[] splitted = st.split("\\s+"); // Split by whitespace
 //                System.out.println("splitted");
@@ -55,13 +54,8 @@ public class SATSolverTest {
 
                 //
                 if (splitted[0].equals("c") || splitted[0].equals("p") || splitted[0].equals("")){
-
                     continue;
-
-                }
-
-                else {
-
+                } else {
 //                    System.out.println(st);
                     Literal a;
 
@@ -85,11 +79,7 @@ public class SATSolverTest {
 
                     }
                     newFormula = newFormula.addClause(newClause);
-
                 }
-
-
-
 //                String output = "Answer: " + st + "\n";
 //                System.out.println(output);
 //                System.out.println(st);
@@ -111,8 +101,13 @@ public class SATSolverTest {
 
         //System.out.println(newFormula);
         //System.out.println(newFormula.getSize());
-
-        System.out.println(SATSolver.solve(newFormula));
+        Formula  f2  =  newFormula;
+        System.out.println("SAT  solver  starts!!!");
+        long  started  = System.nanoTime();
+        Environment  e  = SATSolver.solve(f2);
+        long  time  = System.nanoTime();
+        long  timeTaken=  time  -started;
+        System.out.println("Time:" +  timeTaken/1000000.0  +  "ms");
     }
 
 	
