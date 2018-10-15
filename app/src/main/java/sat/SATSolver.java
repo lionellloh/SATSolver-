@@ -5,10 +5,14 @@ import java.util.Iterator;
 import immutable.EmptyImList;
 import immutable.ImList;
 import immutable.NonEmptyImList;
+import sat.env.Bool;
 import sat.env.Environment;
+import sat.env.Variable;
 import sat.formula.Clause;
 import sat.formula.Formula;
 import sat.formula.Literal;
+import sat.formula.NegLiteral;
+import sat.formula.PosLiteral;
 
 /**
  * A simple DPLL SAT solver. See http://en.wikipedia.org/wiki/DPLL_algorithm
@@ -24,13 +28,7 @@ public class SATSolver {
      *         null if no such environment exists.
      */
     public static Environment solve(Formula formula) {
-        // TODO: implement this.
         Environment env = new Environment();
-        /*for (Iterator<Clause> formulaiterator = formula.iterator(); formulaiterator.hasNext();) { //iterates through formula
-            for (Iterator<Literal> clauseiterator = formulaiterator.next().iterator(); clauseiterator.hasNext();) { //iterators through clauses to get literals
-                env.put(formulaiterator.next().iterator().next().getVariable(), null);
-            }
-        }*/
         return solve(formula.getClauses(), env);
     }
 
@@ -47,16 +45,53 @@ public class SATSolver {
      *         or null if no such environment exists.
      */
     private static Environment solve(ImList<Clause> clauses, Environment env) {
-        // TODO: implement this.
         if (clauses.isEmpty()) {
             return env;
         }
 
-        //Set the smallest clause
+        //Find the smallest clause
         Clause smallest = clauses.first();
-        smallest
+        for (Iterator<Clause> clauseIterator = clauses.iterator(); clauseIterator.hasNext(); ) {
+            if (clauseIterator.next().size() < smallest.size()) {
+                smallest = clauseIterator.next();
+            }
+        }
 
+        //Choose arbitrary literal
+        Literal arbitrary = smallest.chooseLiteral();
+        ImList<Clause> reduced = substitute(clauses, arbitrary);
+        if (reduced == null) {
+            return null;
+        }
 
+        if (arbitrary instanceof NegLiteral) {
+            env.put(arbitrary.getVariable(), Bool.FALSE);
+        } else {
+            env.put(arbitrary.getVariable(), Bool.TRUE);
+        }
+
+        if (smallest.isUnit()) {
+            return solve(reduced, env);
+        } else {
+            Environment sol = solve(reduced, env);
+
+            if (sol == null) {
+                reduced = substitute(reduced, arbitrary.getNegation());
+
+                if (reduced == null) {
+                    return null;
+                }
+
+                if (arbitrary instanceof NegLiteral) {
+                    env.put(arbitrary.getVariable(), Bool.FALSE);
+                } else {
+                    env.put(arbitrary.getVariable(), Bool.TRUE);
+                }
+                return solve(reduced, env);
+            } else {
+                return sol;
+            }
+        }
     }
 
     /**
@@ -72,26 +107,27 @@ public class SATSolver {
     private static ImList<Clause> substitute(ImList<Clause> clauses,
             Literal l) {
         /*Whichever clause has the literal must be removed from the list
-        1. Iterate through the clauses list, if the clause contains the literal, remove that clause
+        1. Iterate through the clauses list, if the clause is true, don't add it to the list
         2. If the clause contains the negation of the literal, remove the literal
+        2a. Check if the clause is empty. If it is, solution is not satisfiable, return null
          */
         ImList<Clause> newList = new EmptyImList<>();
         for (Iterator<Clause> clauseIterator = clauses.iterator(); clauseIterator.hasNext();) {
             Clause addClause = clauseIterator.next();
             if(addClause.contains(l) || addClause.contains(l.getNegation())) {
                 addClause = addClause.reduce(l);
-                /*if (addClause != null) {
+                if (addClause != null) {
                     if (addClause.isEmpty()) {
-                        addClause = null;
+                        return null;
                     }
-                }*/
+                    newList.add(addClause);
+                }
             }
-            newList.add(addClause);
         }
         return newList;
     }
 
     public static void main(String[] args) {
-        System.out.println("Hello!");
+        System.out.println("Hello world!");
     }
 }

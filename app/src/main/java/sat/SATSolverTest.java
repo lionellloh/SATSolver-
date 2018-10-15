@@ -19,6 +19,12 @@ public class SATSolverTest {
     Literal nc = c.getNegation();
 
 
+    public static void main(String[] args) {
+
+
+
+
+    }
 
 	
 	// TODO: add the main method that reads the .cnf file and calls SATSolver.solve to determine the satisfiability
