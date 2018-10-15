@@ -1,5 +1,5 @@
 package sat;
-
+import java.io.*;
 /*
 import static org.junit.Assert.*;
 
@@ -8,9 +8,40 @@ import org.junit.Test;
 
 import sat.env.*;
 import sat.formula.*;
-
+import java.io.*;
 
 public class SATSolverTest {
+
+    public static void main(String[] args) throws FileNotFoundException  {
+
+        File file = new File("/Users/lionellloh/AndroidStudioProjects/SATSolver-/app/src/main/java/sat/sampleCNF/2sat.cnf");
+
+        BufferedReader br = new BufferedReader(new FileReader(file));
+
+        String st;
+
+        int i = 0;
+        try {
+            while ((st = br.readLine()) != null){
+                i+=1;
+                if(i<=2){
+                    continue;
+                }
+
+                System.out.println(st);
+                }
+
+        }catch(IOException ioe) {
+
+            System.out.println(ioe);
+
+        }
+
+
+    }
+
+
+
     Literal a = PosLiteral.make("a");
     Literal b = PosLiteral.make("b");
     Literal c = PosLiteral.make("c");

@@ -54,9 +54,9 @@ public class SATSolver {
 
         //Set the smallest clause
         Clause smallest = clauses.first();
-        smallest
 
 
+        return env;
     }
 
     /**
