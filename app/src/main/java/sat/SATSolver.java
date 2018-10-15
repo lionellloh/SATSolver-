@@ -65,9 +65,9 @@ public class SATSolver {
         }
 
         if (arbitrary instanceof NegLiteral) {
-            env.put(arbitrary.getVariable(), Bool.FALSE);
+            env = env.put(arbitrary.getVariable(), Bool.FALSE);
         } else {
-            env.put(arbitrary.getVariable(), Bool.TRUE);
+            env = env.put(arbitrary.getVariable(), Bool.TRUE);
         }
 
         if (smallest.isUnit()) {
@@ -83,9 +83,9 @@ public class SATSolver {
                 }
 
                 if (arbitrary instanceof NegLiteral) {
-                    env.put(arbitrary.getVariable(), Bool.FALSE);
+                    env = env.put(arbitrary.getVariable(), Bool.FALSE);
                 } else {
-                    env.put(arbitrary.getVariable(), Bool.TRUE);
+                    env = env.put(arbitrary.getVariable(), Bool.TRUE);
                 }
                 return solve(reduced, env);
             } else {
@@ -120,9 +120,12 @@ public class SATSolver {
                     if (addClause.isEmpty()) {
                         return null;
                     }
-                    newList.add(addClause);
+                    newList = newList.add(addClause);
                 }
+            } else {
+                newList = newList.add(addClause);
             }
+            //newList = newList.add(addClause);
         }
         return newList;
     }
