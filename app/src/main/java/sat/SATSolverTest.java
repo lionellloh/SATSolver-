@@ -28,7 +28,17 @@ public class SATSolverTest {
                     continue;
                 }
 
+                String output = "Answer dsdasad: " + st + "\n";
+                System.out.println(output);
                 System.out.println(st);
+
+                try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./BoolAssignment.txt", true), "utf-8")))
+                {
+                    writer.write(output);
+                }
+
+
+
                 }
 
         }catch(IOException ioe) {
