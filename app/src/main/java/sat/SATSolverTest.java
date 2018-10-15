@@ -6,6 +6,16 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 */
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+
 import sat.env.*;
 import sat.formula.*;
 
@@ -19,11 +29,34 @@ public class SATSolverTest {
     Literal nc = c.getNegation();
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException{
+        File file = new File("/C:/Users/Eda Tan/Desktop/Term4/50.001/Project-2D/project-2d-starting/sampleCNF/s8sat.cnf");
 
+        BufferedReader br = new BufferedReader(new FileReader(file));
 
+        String st;
 
+        int i = 0;
+        try {
+            while ((st = br.readLine()) != null){
+                i+=1;
+                if(i<=2){
+                    continue;
+                }
 
+                String output = "Answer dsdasad: " + st + "\n";
+                System.out.println(output);
+                System.out.println(st);
+
+                try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./BoolAssignment.txt", true), "utf-8")))
+                {
+                    writer.write(output);
+                }
+            }
+
+        } catch(IOException ioe) {
+            System.out.println(ioe);
+        }
     }
 
 	
