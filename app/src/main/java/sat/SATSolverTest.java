@@ -32,31 +32,87 @@ public class SATSolverTest {
     public static void main(String[] args) throws FileNotFoundException{
         File file = new File("/C:/Users/Eda Tan/Desktop/Term4/50.001/Project-2D/project-2d-starting/sampleCNF/s8sat.cnf");
 
+        Formula newFormula = new Formula();
         BufferedReader br = new BufferedReader(new FileReader(file));
 
         String st;
 
         int i = 0;
         try {
+
             while ((st = br.readLine()) != null){
-                i+=1;
-                if(i<=2){
+                String[] splitted = st.split("\\s+"); // Split by whitespace
+//                System.out.println("splitted");
+//                System.out.println(splitted[0]);
+//                System.out.println(st);
+
+//                i+=1;
+//                if(i<=2){
+//                    continue;
+//                }
+
+//                System.out.println(splitted[0]);
+
+                //
+                if (splitted[0].equals("c") || splitted[0].equals("p") || splitted[0].equals("")){
+
                     continue;
+
                 }
 
-                String output = "Answer dsdasad: " + st + "\n";
-                System.out.println(output);
-                System.out.println(st);
+                else {
 
-                try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./BoolAssignment.txt", true), "utf-8")))
-                {
-                    writer.write(output);
+//                    System.out.println(st);
+                    Literal a;
+
+                    Clause newClause = new Clause();
+                    for (String s: splitted){
+
+                        if (Integer.parseInt(s) < 0){
+                            a = NegLiteral.make(s);
+                        }
+
+                        else if (Integer.parseInt(s) > 0) {
+                            a = PosLiteral.make(s);
+                        }
+
+                        else {
+                            continue;
+                        }
+
+//                        System.out.println(a);
+                        newClause = newClause.add(a);
+
+                    }
+                    newFormula = newFormula.addClause(newClause);
+
                 }
-            }
 
-        } catch(IOException ioe) {
+
+
+//                String output = "Answer: " + st + "\n";
+//                System.out.println(output);
+//                System.out.println(st);
+
+//                try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./BoolAssignment.txt", true), "utf-8")))
+//                {
+//                    writer.write(output);
+//                }catch(IOException ioe) {
+//
+//            System.out.println(ioe);
+//
+//        }
+
+
+            }}catch(IOException ioe){
+
             System.out.println(ioe);
         }
+
+        //System.out.println(newFormula);
+        //System.out.println(newFormula.getSize());
+
+        System.out.println(SATSolver.solve(newFormula));
     }
 
 	
