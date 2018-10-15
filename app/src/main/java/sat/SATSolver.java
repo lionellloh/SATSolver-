@@ -48,9 +48,14 @@ public class SATSolver {
      */
     private static Environment solve(ImList<Clause> clauses, Environment env) {
         // TODO: implement this.
-        if () {
-
+        if (clauses.isEmpty()) {
+            return env;
         }
+
+        //Set the smallest clause
+        Clause smallest = clauses.first();
+        smallest
+
 
     }
 
@@ -75,21 +80,18 @@ public class SATSolver {
             Clause addClause = clauseIterator.next();
             if(addClause.contains(l) || addClause.contains(l.getNegation())) {
                 addClause = addClause.reduce(l);
-                if (addClause != null) {
+                /*if (addClause != null) {
                     if (addClause.isEmpty()) {
                         addClause = null;
                     }
-                }
+                }*/
             }
             newList.add(addClause);
         }
         return newList;
     }
 
-    /*public static void main(String[] args) {
-        EmptyImList<Clause> testClauses = new EmptyImList<>();
-        EmptyImList<Literal> testLiteral1 = new EmptyImList<>();
-        EmptyImList<Literal> testLiteral2 = new EmptyImList<>();
-        testLiteral1.add()
-    }*/
+    public static void main(String[] args) {
+        System.out.println("Hello!");
+    }
 }
