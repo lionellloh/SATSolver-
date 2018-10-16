@@ -1,10 +1,5 @@
 package sat;
 
-/*
-import static org.junit.Assert.*;
-import org.junit.Test;
-*/
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -30,7 +25,7 @@ public class SATSolverTest {
 
 
     public static void main(String[] args) throws FileNotFoundException{
-        File file = new File("/Users/lionellloh/AndroidStudioProjects/SATSolver-/app/src/main/java/sat/sampleCNF/simple.cnf");
+        File file = new File("/Users/lionellloh/AndroidStudioProjects/SATSolver-/app/src/main/java/sat/sampleCNF/largeUnSat.cnf");
 
         Formula newFormula = new Formula();
         BufferedReader br = new BufferedReader(new FileReader(file));
@@ -39,10 +34,11 @@ public class SATSolverTest {
 
         int i = 0;
         try {
+            System.out.println("Parsing file and creating Formula instance...");
 
+//          Reading the file
             while ((st = br.readLine()) != null){
                 String[] splitted = st.split("\\s+"); // Split by whitespace
-//
                 if (splitted[0].equals("c") || splitted[0].equals("p") || splitted[0].equals("")){
 
                     continue;
@@ -51,7 +47,6 @@ public class SATSolverTest {
 
                 else {
 
-//                    System.out.println(st);
                     Literal a;
 
                     Clause newClause = new Clause();
@@ -59,15 +54,12 @@ public class SATSolverTest {
 
                         if (Integer.parseInt(s) < 0){
 
-//                            string_output.substring(string_output.indexOf("[") + 1, string_output.indexOf("]"))
+//                          Substring it to change -1 to 1
                             String s_input = s.substring(1, s.length());
-                            System.out.println("String input!!!");
-                            System.out.println(s_input);
+
+//                          Convert 1 to ~1 using a Negliteral method
                             a = NegLiteral.make(s_input);
 
-//                            System.out.println(a.getNegation() = PosLiteral.make(s));
-//                            System.out.println(a);
-//                            System.out.println(PosLiteral.make(s_input));
                         }
 
                         else if (Integer.parseInt(s) > 0) {
@@ -85,26 +77,36 @@ public class SATSolverTest {
 
                 }
 
-
             }}catch(IOException ioe){
 
             System.out.println(ioe);
         }
-        System.out.println(newFormula);
+
+        System.out.println("SAT solver starts!!!");
+        long started = System.nanoTime();
+
         Environment output = SATSolver.solve(newFormula);
-        System.out.println(newFormula);
-        System.out.println(output);
+
+        long time = System.nanoTime();
+        long timeTaken = time - started;
+        System.out.println("Time: " + timeTaken/1000000.0 + "ms");
 
 
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./BoolAssignment.txt", true), "utf-8")))
+        if (output == null){
 
+            System.out.println("Unsatisfiable!");
+        }
+
+        else{
+            System.out.println("Satisfiable!");
+
+//            Writing to BoolAssignment.txt
+//            TODO: Clean a file completely each time I write. 
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./app/src/main/java/sat/BoolAssignment.txt", true), "utf-8")))
 
         {
-//
             String string_output = output.toString();
             string_output  = string_output.substring(string_output.indexOf("[") + 1, string_output.indexOf("]"));
-            System.out.println(string_output);
-
             String[] output_split = string_output.split(",");
 
             for (String s: output_split){
@@ -114,14 +116,7 @@ public class SATSolverTest {
                 String part2 = small_split[1].trim();
                 String line = part1 + ":" +  part2 + "\n";
                 writer.write(line);
-
-//                System.out.println(part1);
-//                System.out.println(part2);
-
             }
-
-
-//            System.out.println("WORKS");
 
 
         }catch(IOException ioe) {
@@ -129,10 +124,11 @@ public class SATSolverTest {
             System.out.println(ioe);
 
         }
+
+            System.out.println("File written!");
     }
 
-
-    // TODO: add the main method that reads the .cnf file and calls SATSolver.solve to determine the satisfiability
+    }
 
 
     public void testSATSolver1(){
@@ -161,6 +157,5 @@ public class SATSolverTest {
         }
         return c;
     }
-
 
 }

@@ -117,15 +117,12 @@ public class SATSolver {
         ImList<Clause> newList = new EmptyImList<>();
         for (Clause addClause: clauses) {
             if(addClause.contains(l) || addClause.contains(l.getNegation())) {
-                System.out.println("reducing");
-                System.out.println(addClause);
-                System.out.println(l);
+
                 addClause = addClause.reduce(l);
-                System.out.println(addClause);
-                System.out.println("reduced");
+
                 if (addClause != null) {
                     if (addClause.isEmpty()) {
-                        System.out.println("EDA");
+
                         return null;
                     }
                     newList = newList.add(addClause);
@@ -133,7 +130,6 @@ public class SATSolver {
             } else {
                 newList = newList.add(addClause);
             }
-            //newList = newList.add(addClause);
         }
         return newList;
     }
