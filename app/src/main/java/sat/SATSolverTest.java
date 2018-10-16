@@ -30,7 +30,7 @@ public class SATSolverTest {
 
 
     public static void main(String[] args) throws FileNotFoundException{
-        File file = new File("/Users/lionellloh/AndroidStudioProjects/SATSolver-/app/src/main/java/sat/sampleCNF/2sat.cnf");
+        File file = new File("/Users/lionellloh/AndroidStudioProjects/SATSolver-/app/src/main/java/sat/sampleCNF/simple.cnf");
 
         Formula newFormula = new Formula();
         BufferedReader br = new BufferedReader(new FileReader(file));
@@ -58,7 +58,16 @@ public class SATSolverTest {
                     for (String s: splitted){
 
                         if (Integer.parseInt(s) < 0){
-                            a = NegLiteral.make(s);
+
+//                            string_output.substring(string_output.indexOf("[") + 1, string_output.indexOf("]"))
+                            String s_input = s.substring(1, s.length());
+                            System.out.println("String input!!!");
+                            System.out.println(s_input);
+                            a = NegLiteral.make(s_input);
+
+//                            System.out.println(a.getNegation() = PosLiteral.make(s));
+//                            System.out.println(a);
+//                            System.out.println(PosLiteral.make(s_input));
                         }
 
                         else if (Integer.parseInt(s) > 0) {
@@ -81,7 +90,9 @@ public class SATSolverTest {
 
             System.out.println(ioe);
         }
+        System.out.println(newFormula);
         Environment output = SATSolver.solve(newFormula);
+        System.out.println(newFormula);
         System.out.println(output);
 
 
@@ -90,7 +101,6 @@ public class SATSolverTest {
 
         {
 //
-
             String string_output = output.toString();
             string_output  = string_output.substring(string_output.indexOf("[") + 1, string_output.indexOf("]"));
             System.out.println(string_output);

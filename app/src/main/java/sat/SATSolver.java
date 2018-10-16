@@ -46,14 +46,16 @@ public class SATSolver {
      */
     private static Environment solve(ImList<Clause> clauses, Environment env) {
         if (clauses.isEmpty()) {
+
+
             return env;
         }
 
         //Find the smallest clause
         Clause smallest = clauses.first();
-        for (Iterator<Clause> clauseIterator = clauses.iterator(); clauseIterator.hasNext(); ) {
-            if (clauseIterator.next().size() < smallest.size()) {
-                smallest = clauseIterator.next();
+        for (Clause c: clauses) {
+            if (c.size() < smallest.size()) {
+                smallest = c;
             }
         }
 
@@ -61,6 +63,7 @@ public class SATSolver {
         Literal arbitrary = smallest.chooseLiteral();
         ImList<Clause> reduced = substitute(clauses, arbitrary);
         if (reduced == null) {
+
             return null;
         }
 
@@ -112,12 +115,17 @@ public class SATSolver {
         2a. Check if the clause is empty. If it is, solution is not satisfiable, return null
          */
         ImList<Clause> newList = new EmptyImList<>();
-        for (Iterator<Clause> clauseIterator = clauses.iterator(); clauseIterator.hasNext();) {
-            Clause addClause = clauseIterator.next();
+        for (Clause addClause: clauses) {
             if(addClause.contains(l) || addClause.contains(l.getNegation())) {
+                System.out.println("reducing");
+                System.out.println(addClause);
+                System.out.println(l);
                 addClause = addClause.reduce(l);
+                System.out.println(addClause);
+                System.out.println("reduced");
                 if (addClause != null) {
                     if (addClause.isEmpty()) {
+                        System.out.println("EDA");
                         return null;
                     }
                     newList = newList.add(addClause);
