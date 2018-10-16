@@ -14,6 +14,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.*;
 
 import sat.env.*;
 import sat.formula.*;
@@ -68,7 +69,6 @@ public class SATSolverTest {
                             continue;
                         }
 
-//                        System.out.println(a);
                         newClause = newClause.add(a);
 
                     }
@@ -77,30 +77,48 @@ public class SATSolverTest {
                 }
 
 
-
-//                String output = "Answer: " + st + "\n";
-//                System.out.println(output);
-//                System.out.println(st);
-
-//                try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./BoolAssignment.txt", true), "utf-8")))
-//                {
-//                    writer.write(output);
-//                }catch(IOException ioe) {
-//
-//            System.out.println(ioe);
-//
-//        }
-
-
             }}catch(IOException ioe){
 
             System.out.println(ioe);
         }
+        Environment output = SATSolver.solve(newFormula);
+        System.out.println(output);
 
-        //System.out.println(newFormula);
-        //System.out.println(newFormula.getSize());
 
-        System.out.println(SATSolver.solve(newFormula));
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./BoolAssignment.txt", true), "utf-8")))
+
+
+        {
+//
+
+            String string_output = output.toString();
+            string_output  = string_output.substring(string_output.indexOf("[") + 1, string_output.indexOf("]"));
+            System.out.println(string_output);
+
+            String[] output_split = string_output.split(",");
+
+            for (String s: output_split){
+
+                String[] small_split = s.split("\\-\\>");
+                String part1 = small_split[0].trim();
+                String part2 = small_split[1].trim();
+                String line = part1 + ":" +  part2 + "\n";
+                writer.write(line);
+
+//                System.out.println(part1);
+//                System.out.println(part2);
+
+            }
+
+
+//            System.out.println("WORKS");
+
+
+        }catch(IOException ioe) {
+
+            System.out.println(ioe);
+
+        }
     }
 
 
@@ -110,21 +128,12 @@ public class SATSolverTest {
     public void testSATSolver1(){
         // (a v b)
         Environment e = SATSolver.solve(makeFm(makeCl(a,b))	);
-
-//    	assertTrue( "one of the literals should be set to true",
-//    			Bool.TRUE == e.get(a.getVariable())
-//    			|| Bool.TRUE == e.get(b.getVariable())	);
-
-
     }
 
 
     public void testSATSolver2(){
         // (~a)
         Environment e = SATSolver.solve(makeFm(makeCl(na)));
-/*
-    	assertEquals( Bool.FALSE, e.get(na.getVariable()));
-*/
     }
 
     private static Formula makeFm(Clause... e) {
@@ -142,7 +151,6 @@ public class SATSolverTest {
         }
         return c;
     }
-
 
 
 }
