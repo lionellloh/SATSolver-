@@ -25,6 +25,7 @@ public class SATSolverTest {
 
 
     public static void main(String[] args) throws FileNotFoundException{
+
         String filename = "2sat.cnf";
         File file = new File("/Users/lionellloh/AndroidStudioProjects/SATSolver-/app/src/main/java/sat/sampleCNF/" + filename);
 
@@ -102,6 +103,7 @@ public class SATSolverTest {
             System.out.println("Satisfiable!");
 
 //            Writing to BoolAssignment.txt
+
             System.out.println("File writing in process...");
 //            TODO: Clean a file completely each time I write.
 
@@ -142,10 +144,38 @@ public class SATSolverTest {
 
             }
 
-            System.out.println("File written!");
+
         }
 
+//            TODO: Clean a file completely each time I write. 
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./app/src/main/java/sat/BoolAssignment.txt", true), "utf-8")))
+
+        {
+            String string_output = output.toString();
+            string_output  = string_output.substring(string_output.indexOf("[") + 1, string_output.indexOf("]"));
+            String[] output_split = string_output.split(",");
+
+            for (String s: output_split){
+
+                String[] small_split = s.split("\\-\\>");
+                String part1 = small_split[0].trim();
+                String part2 = small_split[1].trim();
+                String line = part1 + ":" +  part2 + "\n";
+                writer.write(line);
+            }
+
+
+        }catch(IOException ioe) {
+
+            System.out.println(ioe);
+
+        }
+
+            System.out.println("File written!");
     }
+
+
+
 
 
     public void testSATSolver1(){

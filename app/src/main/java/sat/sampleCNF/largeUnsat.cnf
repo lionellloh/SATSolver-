@@ -1,5 +1,10 @@
 c Checking s8 equivalent ripple-carry and carry-select adders
 p cnf 6100 6000
+<<<<<<< HEAD
+=======
+-2 0
+2 0
+>>>>>>> 6db1063b4d93f52c5b615fac03226baa68506c65
 -1 2 0
 -2 3 0
 -3 4 0

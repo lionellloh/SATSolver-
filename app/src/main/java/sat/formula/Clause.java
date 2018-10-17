@@ -124,6 +124,7 @@ public class Clause implements Iterable<Literal> {
      * @return the new clause with the literal added, or null
      */
     public Clause add(Literal l) {
+
         if (literals.contains(l)) return this;
         if (literals.contains(l.getNegation())) return null;
         return new Clause(literals.add(l));
