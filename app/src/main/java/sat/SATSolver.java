@@ -23,7 +23,7 @@ public class SATSolver {
      * unit propagation. The returned environment binds literals of class
      * bool.Variable rather than the special literals used in clausification of
      * class clausal.Literal, so that clients can more readily use it.
-     * 
+     *
      * @return an environment for which the problem evaluates to Bool.TRUE, or
      *         null if no such environment exists.
      */
@@ -35,7 +35,7 @@ public class SATSolver {
     /**
      * Takes a partial assignment of variables to values, and recursively
      * searches for a complete satisfying assignment.
-     * 
+     *
      * @param clauses
      *            formula in conjunctive normal form
      * @param env
@@ -46,6 +46,8 @@ public class SATSolver {
      */
     private static Environment solve(ImList<Clause> clauses, Environment env) {
         if (clauses.isEmpty()) {
+
+
             return env;
         }
 
@@ -61,6 +63,7 @@ public class SATSolver {
         Literal arbitrary = smallest.chooseLiteral();
         ImList<Clause> reduced = substitute(clauses, arbitrary);
         if (reduced == null) {
+
             return null;
         }
 
@@ -97,7 +100,7 @@ public class SATSolver {
     /**
      * given a clause list and literal, produce a new list resulting from
      * setting that literal to true
-     * 
+     *
      * @param clauses
      *            , a list of clauses
      * @param l
@@ -105,7 +108,7 @@ public class SATSolver {
      * @return a new list of clauses resulting from setting l to true
      */
     private static ImList<Clause> substitute(ImList<Clause> clauses,
-            Literal l) {
+                                             Literal l) {
         /*Whichever clause has the literal must be removed from the list
         1. Iterate through the clauses list, if the clause is true, don't add it to the list
         2. If the clause contains the negation of the literal, remove the literal
@@ -114,9 +117,12 @@ public class SATSolver {
         ImList<Clause> newList = new EmptyImList<>();
         for (Clause addClause: clauses) {
             if(addClause.contains(l) || addClause.contains(l.getNegation())) {
+
                 addClause = addClause.reduce(l);
+
                 if (addClause != null) {
                     if (addClause.isEmpty()) {
+
                         return null;
                     }
                     newList = newList.add(addClause);
@@ -124,7 +130,6 @@ public class SATSolver {
             } else {
                 newList = newList.add(addClause);
             }
-            //newList = newList.add(addClause);
         }
         return newList;
     }
