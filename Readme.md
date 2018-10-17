@@ -60,17 +60,19 @@ p cnf 6 5
 git clone https://github.com/lionellloh/SATSolver-
 ```
 
-[Companion Repo](https://github.com/lionellloh/32bitAdder) contains the 32 bit Adder code done in JSIM. The .bc file contains a partial representation of the 32 bit Brent Kung Architecture and the ri
+[32 bit adder](https://github.com/lionellloh/32bitAdder) is the compannion repo that contains the 32 bit Adder code done in **JSIM**. The .bc file contains a partial representation of the 32 bit Brent Kung Architecture and the Ripple Architecture. 
 
+Using an online programe specified in the repo, we converted the `.bc`file to `.cnf` format. We then run the CNF file through our java program to check satisfiability. 
 
+**But Why?**
 
-
+The `.bc` file contains a partial representation of each architecture. We derive a Propositional formula through a **XOR** operation between 2 of the arcchitecture. If the derived CNF is unsatisfiable, then we would have proven that the implementation of both architectures has Boolean equivalence. The Brent-Kung Architecture is an improvement to the Ripple Architecture. It is important to ensure that while optimising for speed, the logic of the 32 bit-adder is not changed. 
 
 ### Team Members
 
+- Lionell Loh 
+- Glenn Chia
 - Billio Jeverson 
 - Claire Tan 
 - Eda Tan 
-- Glenn Chia 
-- Lionell Loh
 - Sean Lew 
