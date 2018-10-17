@@ -1,0 +1,5 @@
+Filename: simp_test.cnf
+2:FALSE
+1:FALSE
+3:TRUE
+4:TRUE
