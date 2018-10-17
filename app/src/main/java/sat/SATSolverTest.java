@@ -26,7 +26,8 @@ public class SATSolverTest {
 
     public static void main(String[] args) throws FileNotFoundException{
 
-        String filename = "2sat.cnf";
+        String filename = "glenn.cnf";
+
         File file = new File("/Users/lionellloh/AndroidStudioProjects/SATSolver-/app/src/main/java/sat/sampleCNF/" + filename);
 
         Formula newFormula = new Formula();
@@ -68,6 +69,7 @@ public class SATSolverTest {
                             a = PosLiteral.make(s);
                         }
 
+
                         else {
                             continue;
                         }
@@ -75,7 +77,11 @@ public class SATSolverTest {
                         newClause = newClause.add(a);
 
                     }
-                    newFormula = newFormula.addClause(newClause);
+//                    System.out.println(newClause);
+                    if (newClause != null){
+                        newFormula = newFormula.addClause(newClause);
+                    }
+
 
                 }
 
@@ -87,6 +93,7 @@ public class SATSolverTest {
         System.out.println("SAT solver starts!!!");
         long started = System.nanoTime();
 
+//        System.out.println(newFormula);
         Environment output = SATSolver.solve(newFormula);
 
         long time = System.nanoTime();
@@ -119,35 +126,7 @@ public class SATSolverTest {
 
             }
 
-
-//            Writing of satisfiable test cases
-            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./app/src/main/java/sat/BoolAssignment.txt", true), "utf-8")))
-
-            {
-                String string_output = output.toString();
-                string_output  = string_output.substring(string_output.indexOf("[") + 1, string_output.indexOf("]"));
-                String[] output_split = string_output.split(",");
-
-                for (String s: output_split){
-
-                    String[] small_split = s.split("\\-\\>");
-                    String part1 = small_split[0].trim();
-                    String part2 = small_split[1].trim();
-                    String line = part1 + ":" +  part2 + "\n";
-                    writer.write(line);
-                }
-
-
-            }catch(IOException ioe) {
-
-                System.out.println(ioe);
-
-            }
-
-
-        }
-
-//            TODO: Clean a file completely each time I write. 
+//            TODO: Clean a file completely each time I write.
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("./app/src/main/java/sat/BoolAssignment.txt", true), "utf-8")))
 
         {
@@ -170,8 +149,10 @@ public class SATSolverTest {
             System.out.println(ioe);
 
         }
-
             System.out.println("File written!");
+        }
+
+
     }
 
 
