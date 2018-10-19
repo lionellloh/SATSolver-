@@ -46,9 +46,13 @@ public class SATSolver {
      */
     private static Environment solve(ImList<Clause> clauses, Environment env) {
         if (clauses.isEmpty()) {
-
-
             return env;
+        } else {
+            for (Clause c: clauses) {
+                if (c.isEmpty()) {
+                    return null;
+                }
+            }
         }
 
         //Find the smallest clause
@@ -59,42 +63,33 @@ public class SATSolver {
             }
         }
 
+
         //Choose arbitrary literal
         Literal arbitrary = smallest.chooseLiteral();
-        ImList<Clause> reduced = substitute(clauses, arbitrary);
-        if (reduced == null) {
-
-            return null;
-        }
-
-        if (arbitrary instanceof NegLiteral) {
-            env = env.put(arbitrary.getVariable(), Bool.FALSE);
-        } else {
-            env = env.put(arbitrary.getVariable(), Bool.TRUE);
-        }
 
         if (smallest.isUnit()) {
-            return solve(reduced, env);
-        } else {
-            Environment sol = solve(reduced, env);
 
-            if (sol == null) {
-                reduced = substitute(reduced, arbitrary.getNegation());
-
-                if (reduced == null) {
-                    return null;
-                }
-
-                if (arbitrary instanceof NegLiteral) {
-                    env = env.put(arbitrary.getVariable(), Bool.FALSE);
-                } else {
-                    env = env.put(arbitrary.getVariable(), Bool.TRUE);
-                }
-                return solve(reduced, env);
+            if (arbitrary.equals(PosLiteral.make(arbitrary.getVariable()))) {
+                env = env.put(arbitrary.getVariable(), Bool.FALSE);
             } else {
+                env = env.put(arbitrary.getVariable(), Bool.TRUE);
+            }
+
+            return solve(substitute(clauses, arbitrary), env);
+        } else {
+            if (NegLiteral.make(arbitrary.getVariable()).equals(arbitrary)) {
+                arbitrary = arbitrary.getNegation();
+            }
+
+            Environment sol = solve(substitute(clauses, arbitrary), env.putTrue(arbitrary.getVariable()));
+            if (sol != null) {
                 return sol;
+            } else {
+                arbitrary = arbitrary.getNegation();
+                return solve(substitute(clauses, arbitrary), env.putFalse(arbitrary.getVariable()));
             }
         }
+
     }
 
     /**
@@ -108,29 +103,24 @@ public class SATSolver {
      * @return a new list of clauses resulting from setting l to true
      */
     private static ImList<Clause> substitute(ImList<Clause> clauses,
-                                             Literal l) {
+                                              Literal l) {
         /*Whichever clause has the literal must be removed from the list
         1. Iterate through the clauses list, if the clause is true, don't add it to the list
         2. If the clause contains the negation of the literal, remove the literal
         2a. Check if the clause is empty. If it is, solution is not satisfiable, return null
          */
         ImList<Clause> newList = new EmptyImList<>();
-        for (Clause addClause: clauses) {
-            if(addClause.contains(l) || addClause.contains(l.getNegation())) {
+        for (Clause c: clauses){
 
-                addClause = addClause.reduce(l);
-
-                if (addClause != null) {
-                    if (addClause.isEmpty()) {
-
-                        return null;
-                    }
-                    newList = newList.add(addClause);
-                }
-            } else {
+            Clause addClause = c.reduce(l);
+            if (addClause != null){
                 newList = newList.add(addClause);
             }
         }
         return newList;
+
     }
 }
+
+
+

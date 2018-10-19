@@ -26,11 +26,12 @@ public class SATSolverTest {
 
     public static void main(String[] args) throws FileNotFoundException{
 
-        String filename = "glenn.cnf";
+        String filename = "unsat3Large.cnf";
 
         File file = new File("/Users/lionellloh/AndroidStudioProjects/SATSolver-/app/src/main/java/sat/sampleCNF/" + filename);
 
         Formula newFormula = new Formula();
+//        System.out.println(newFormula);
         BufferedReader br = new BufferedReader(new FileReader(file));
 
         String st;
@@ -63,6 +64,8 @@ public class SATSolverTest {
 //                          Convert 1 to ~1 using a Negliteral method
                             a = NegLiteral.make(s_input);
 
+
+
                         }
 
                         else if (Integer.parseInt(s) > 0) {
@@ -85,7 +88,9 @@ public class SATSolverTest {
 
                 }
 
-            }}catch(IOException ioe){
+            }
+//            System.out.println(newFormula);
+        }catch(IOException ioe){
 
             System.out.println(ioe);
         }
@@ -134,6 +139,8 @@ public class SATSolverTest {
             string_output  = string_output.substring(string_output.indexOf("[") + 1, string_output.indexOf("]"));
             String[] output_split = string_output.split(",");
 
+
+
             for (String s: output_split){
 
                 String[] small_split = s.split("\\-\\>");
@@ -154,9 +161,6 @@ public class SATSolverTest {
 
 
     }
-
-
-
 
 
     public void testSATSolver1(){
